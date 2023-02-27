@@ -1,0 +1,11 @@
+button {
+  margin-right: 10px;
+}
+
+.modal-img:hover {
+  cursor: pointer;
+}
+
+.stock-icon {
+  font-size: 20px;
+}

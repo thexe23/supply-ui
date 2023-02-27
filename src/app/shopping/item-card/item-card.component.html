@@ -1,0 +1,22 @@
+<div class="wrapper">
+    <div class="img">
+      <img src= {{this.imgUrl}} alt="" width="220px" height="220px">
+    </div>
+    <div class="price">
+        <em>¥</em>
+        {{this.price}}
+    </div>
+    <div class="name">
+      {{this.name}}
+    </div>
+    <div class="name">
+      数量：<nz-input-number [(ngModel)]="this.cartItem.number" [nzMin]="1" [nzStep]="1"></nz-input-number>
+    </div>
+    <div class="btn">
+      <nz-space>
+        <button *nzSpaceItem nz-button nzType="primary" (click)="addToCart(this.cartItem)" >
+          加入购物车
+        </button>
+      </nz-space>
+    </div>
+  </div>

@@ -1,0 +1,10 @@
+    <nz-carousel nzAutoPlay style="height: 300px; line-height: 160px;">
+      <div nz-carousel-content *ngFor="let index of array">
+        <img  [src]="'assets/' + index + '.png'" alt="" height="300px">
+      </div>
+    </nz-carousel>
+    <div class="item-list">
+      <div *ngFor="let item of items" class="item-card">
+        <app-item-card [id]="item.id" [price]="item.price" [name]="item.name" [imgUrl]="item.imgUrl" ></app-item-card>
+      </div>
+    </div>

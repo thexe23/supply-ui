@@ -1,0 +1,49 @@
+
+    <nz-card style="width: 100%;" nzTitle="我的订单">
+      <nz-card-tab>
+        <nz-tabset nzSize="large" [(nzSelectedIndex)]="index" (nzSelectedIndexChange)="changeTab($event)"	>
+          <nz-tab nzTitle="全部"></nz-tab>
+          <nz-tab nzTitle="待付款"></nz-tab>
+          <nz-tab nzTitle="待发货"></nz-tab>
+          <nz-tab nzTitle="待取货"></nz-tab>
+          <nz-tab nzTitle="待收货"></nz-tab>
+          <nz-tab nzTitle="已完成"></nz-tab>
+          <nz-tab nzTitle="已取消"></nz-tab>
+        </nz-tabset>
+      </nz-card-tab>
+      <nz-table nzBordered nzTableLayout="fixed">
+        <thead>
+          <tr>
+            <th>订单号</th>
+            <th>下单时间</th>
+            <th>商品</th>
+            <th>配送地址</th>
+            <th>订单金额</th>
+            <th>订单状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of listOfData">
+            <td>{{order.id}}</td>
+            <td>{{order.createdAt}}</td>
+            <td>
+              <span *ngFor="let item of order.items">
+                {{item.name}} x {{item.number}}
+                <br>
+              </span>
+            </td>
+            <td>{{orgMap.get(order.orgId)}}</td>
+            <td>¥{{ order.amount }}元</td>
+            <td>
+              {{statusMap.get(order.orderStatus)}}
+            </td>
+            <td>
+              <button nz-button nzType="primary" *ngIf="order.orderStatus == 10" (click)="pay(order.id)">去付款</button>
+              <button nz-button nzType="primary" nzDanger *ngIf="order.orderStatus > 0 && order.orderStatus <= 30" (click)="cancel(order.id)">取消</button>
+              <button nz-button nzType="primary" *ngIf="order.orderStatus == 40" (click)="complete(order.id)">确认收货</button>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>

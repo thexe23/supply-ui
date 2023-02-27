@@ -1,0 +1,82 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar"
+              nzCollapsible
+              nzWidth="256px"
+              nzBreakpoint="md"
+              [nzTrigger]="null">
+      <div class="sidebar-logo">
+          <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
+          <h1>华农采购</h1>
+      </div>
+      <ul nz-menu nzTheme="dark" nzMode="inline" >
+        <li nz-submenu nzOpen nzTitle="管理中心" nzIcon="dashboard">
+          <ul>
+            <li nz-menu-item nzMatchRouter *ngIf="role === 4">
+              <a routerLink="user" >用户管理</a>
+            </li>
+            <li nz-menu-item nzMatchRouter *ngIf="role === 3">
+              <a routerLink="item">商品管理</a>
+            </li>
+            <li nz-menu-item nzMatchRouter *ngIf="role === 4">
+              <a routerLink="stock">库存管理</a>
+            </li>
+            <li nz-menu-item nzMatchRouter *ngIf="role !== 4">
+              <a routerLink="order">订单管理</a>
+            </li>
+            <li nz-menu-item nzMatchRouter *ngIf="role == 4">
+              <a routerLink="transport">调配管理</a>
+            </li>
+            <li nz-menu-item nzMatchRouter *ngIf="role == 3">
+              <a routerLink="trans-in">调配中心</a>
+            </li>
+          </ul>
+        </li>
+        <li nz-submenu nzOpen nzTitle="个人中心" nzIcon="form">
+          <ul>
+            <li nz-menu-item nzMatchRouter>
+              <a routerLink="profile">账号管理</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <div class="app-header" nz-row>
+            <a nz-dropdown [nzDropdownMenu]="menu" nz-col nzSpan="1" nzOffset="20">
+              <nz-avatar nzSize="default" nzIcon="user" [nzSrc]="user[0].imgUrl" *ngIf="user[0] !== undefined"></nz-avatar>
+            </a>
+              <span (click)="open()" >
+               消息
+              </span>
+              <nz-badge nzStandalone [nzCount]="notification == null ? 0 :notification.length"></nz-badge>
+          </div>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+  <nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" nzTitle="消息中心" (nzOnClose)="close()">
+    <ng-container *nzDrawerContent>
+      <button *ngIf="notification != null && notification.length > 0" nz-button nzType="primary" nzDanger (click)="removeAll()" >清除</button>
+      <button nz-button nzType="primary" (click)="refresh()" style="float: right">刷新</button>
+      <div *ngFor="let n of notification" class="notification" >
+        <nz-tag [nzColor]="typeColorMap.get(n.type)">{{ typeMap.get(n.type) }}</nz-tag>
+        {{ n.content}}
+        <i nz-icon nzType="close" nzColor="#e9e9e9" style="float: right" (click)="remove(n.content)"></i>
+      </div>
+    </ng-container>
+  </nz-drawer>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item>
+        <a routerLink="profile">个人中心</a>
+      </li>
+      <li nz-menu-item>
+        <a routerLink="/login">退出登陆</a>
+      </li>
+    </ul>
+  </nz-dropdown-menu>

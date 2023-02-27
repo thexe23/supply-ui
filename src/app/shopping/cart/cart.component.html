@@ -1,0 +1,49 @@
+
+    <nz-table #editRowTable [nzData]="listOfData" nzTableLayout="fixed" [nzWidthConfig]="['5%','15%','25%','25%','30%']"	>
+        <tbody>
+          <tr *ngFor="let data of editRowTable.data">
+            <td
+            [nzChecked]="setOfChecked.has(data)"
+            (nzCheckedChange)="onItemChecked(data, $event)"
+          ></td>
+              <td>
+                <img
+                  nz-image
+                  width="120vw"
+                  height="90vh"
+                  src={{data.imgUrl}}
+                  alt=""
+                />
+              </td>
+              <td>
+                <span nz-typography>{{data.name}}</span>
+                <span nz-typography nzType="danger">(¥{{data.price}})</span>
+              <br>
+                <nz-input-number [(ngModel)]="data.number" [nzMin]="1" [nzStep]="1"></nz-input-number>
+              </td>
+              <td>
+                <p nz-typography nzType="danger">¥{{ (data.number * data.price).toFixed(2)}}</p>
+              </td>
+              <td>
+                <button
+                nz-popconfirm
+                nzPopconfirmTitle="确认要删除吗?"
+                (nzOnConfirm)="delete(data.id)"
+                nz-button nzType="primary" nzDanger>删除</button>
+              </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <nz-space class="cart-btn" *ngIf="listOfData.length != 0">
+        <p *nzSpaceItem nz-typography nzType="danger">合计：¥{{this.sum.toFixed(2)}}</p>
+        <button
+                *nzSpaceItem
+                nz-popconfirm
+                nzPopconfirmTitle="确认要清空吗?"
+                (nzOnConfirm)="deleteAll()"
+                nz-button nzType="primary" nzDanger>清空</button>
+        <button *nzSpaceItem nz-button nzType="primary" (click)="checkout()" [disabled]="setOfChecked.size == 0">
+          去结算
+        </button>
+      </nz-space>
+    

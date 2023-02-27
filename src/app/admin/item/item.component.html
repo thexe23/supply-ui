@@ -1,0 +1,112 @@
+<button nz-button nzType="primary" (click)="addItem()"><i nz-icon nzType="plus"></i>新建商品</button>
+<br>
+    <nz-table #editRowTable [nzData]="listOfData" nzTableLayout="fixed" [nzWidthConfig]="['20%','25%','25%','30%']"	>
+      <tbody>
+        <tr *ngFor="let data of editRowTable.data">
+            <td>
+              <img
+                nz-image
+                width="120vw"
+                height="90vh"
+                src={{data.imgUrl}}
+                alt=""
+              />
+            </td>
+            <td nzAlgin="left">
+              <p nz-typography>{{data.name}}</p>
+              <span nz-typography nzType="danger">¥{{data.price}}</span>
+            </td>
+              <td *ngIf="data.stock >= 100">
+                <i nz-icon nzType="check-circle" nzTheme="twotone" nzTwotoneColor="yellowgreen" class="stock-icon"></i>库存充足({{data.stock}})
+              </td>
+              <td *ngIf="data.stock >= 0 && data.stock < 100">
+                <i nz-icon nzType="alert" nzTheme="twotone" nzTwotoneColor="orange" class="stock-icon"></i>库存紧张({{data.stock}})
+                <br>
+                　<a (click)="reqTrans(data.name)">请求调配</a>
+              </td>
+              <td *ngIf="data.stock < 0">
+                <i nz-icon nzType="close-circle" nzTheme="twotone" nzTwotoneColor="red" class="stock-icon"></i>库存不足({{data.stock}})
+                <br>
+                　<a (click)="reqTrans(data.name)">请求调配</a>
+              </td>
+            <td nzAlgin="left" *ngIf="data.onSale == true">
+              <button nz-button nzType="primary" (click)="editItem(data.id)">编辑商品</button>
+              <nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+                <ng-container *nzModalContent>
+                  <form nz-form>
+                    <nz-form-item>
+                      <nz-form-label [nzSpan]="5">
+                        商品图片
+                      </nz-form-label>
+                    <nz-upload
+                    nzAction="api/guard/oss/upload"
+                    (nzChange)="handleChange($event)"
+                    [nzShowUploadList]="false"
+                  >
+                  <img
+                  nz-image
+                  width="120vw"
+                  height="90vh"
+                  src={{modalData.imgUrl}}
+                  alt=""
+                  title="点击上传图片"
+                  class="modal-img"
+                />
+                  </nz-upload>
+                    </nz-form-item>
+                    <nz-form-item>
+                      <nz-form-label [nzSpan]="5">商品名称</nz-form-label>
+                      <nz-form-control nzHasFeedback [nzSpan]="12" nzErrorTip="商品名称不能为空！">
+                        <input nz-input [(ngModel)]="modalData.name" name="name" required />
+                      </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                      <nz-form-label [nzSpan]="5">价格</nz-form-label>
+                      <nz-form-control [nzSpan]="12">
+                        <nz-input-number
+                        name="price"
+                        [(ngModel)]="modalData.price"
+                        [nzMin]="0"
+                        [nzStep]="1"
+                        [nzFormatter]="formatterRMB"
+                        [nzParser]="parserRMB"
+                      ></nz-input-number>
+                      </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                      <nz-form-label [nzSpan]="5">库存</nz-form-label>
+                      <nz-form-control [nzSpan]="12">
+                        <nz-input-number
+                        name="stock"
+                        [(ngModel)]="modalData.stock"
+                        [nzStep]="1"
+                      ></nz-input-number>
+                      </nz-form-control>
+                    </nz-form-item>
+                    <nz-form-item>
+                      <nz-form-label [nzSpan]="5">类别</nz-form-label>
+                      <nz-form-control [nzSpan]="12">
+                        <nz-select  name="category"  [(ngModel)]="modalData.category">
+                          <nz-option nzLabel="日用百货" [nzValue]="+1"></nz-option>
+                          <nz-option nzLabel="生鲜" [nzValue]="+2"></nz-option>
+                        </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                  </form>
+                </ng-container>
+              </nz-modal>
+              <button
+              nz-popconfirm
+              nzPopconfirmTitle="确认要下架吗?"
+              (nzOnConfirm)="toggle(data.id, false)"
+              nz-button nzType="primary" nzDanger>下架</button>
+            </td>
+            <td nzAlgin="left" *ngIf="data.onSale == false">
+              <button
+              (click)="toggle(data.id, true)"
+              nz-button nzType="primary">重新上架</button>
+            </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  

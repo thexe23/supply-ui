@@ -1,0 +1,101 @@
+<div *ngIf="role === 4">
+  <button nz-button nzType="primary" (click)="addTransport()">
+      <i nz-icon nzType="plus"></i>新建调配
+  </button>
+</div>
+<br>
+<div nz-row>
+  <div nz-col nzSpan="3">
+    <input nz-input placeholder="商品" [(ngModel)]="selectName">
+  </div>
+  <div nz-col nzSpan="2">
+    <nz-select nzAllowClear nzPlaceHolder="调出地" [(ngModel)]="selectSource">
+      <nz-option nzLabel="商超1" [nzValue]="10008"></nz-option>
+      <nz-option nzLabel="商超2" [nzValue]="10009"></nz-option>
+      <nz-option nzLabel="供应商" [nzValue]="9999"></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="2">
+    <nz-select nzAllowClear nzPlaceHolder="调入地" [(ngModel)]="selectTarget">
+      <nz-option nzLabel="商超1" [nzValue]="10008"></nz-option>
+      <nz-option nzLabel="商超2" [nzValue]="10009"></nz-option>
+      <nz-option nzLabel="供应商" [nzValue]="9999"></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="6">
+    <button nz-button nzType="primary" (click)="search()">查询</button>
+  </div>
+</div>
+<nz-modal [(nzVisible)]="isVisible" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <form nz-form>
+        <nz-form-item>
+            <nz-form-label [nzSpan]="5">发货</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+              <nz-select  name="sourceId"  [(ngModel)]="modalData.sourceId">
+                <nz-option nzLabel="超市1" [nzValue]="+10008"></nz-option>
+                <nz-option nzLabel="超市2" [nzValue]="+10009"></nz-option>
+                <nz-option nzLabel="供应商" [nzValue]="+9999"></nz-option>
+              </nz-select>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5">收货</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+              <nz-select  name="targetId"  [(ngModel)]="modalData.targetId">
+                <nz-option nzLabel="超市1" [nzValue]="+10008"></nz-option>
+                <nz-option nzLabel="超市2" [nzValue]="+10009"></nz-option>
+              </nz-select>
+              </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5">商品名称</nz-form-label>
+            <nz-form-control [nzSpan]="12">
+              <nz-select  name="item"  [(ngModel)]="modalData.item">
+                <nz-option nzLabel="口罩" [nzValue]="'口罩'"></nz-option>
+                <nz-option nzLabel="饮用水" [nzValue]="'饮用水'"></nz-option>
+              </nz-select>
+              </nz-form-control>
+          </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="5">数量</nz-form-label>
+          <nz-form-control [nzSpan]="12">
+            <nz-input-number
+            name="quantity"
+            [(ngModel)]="modalData.quantity"
+            [nzStep]="1"
+            [nzMin]="0"
+          ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </ng-container>
+  </nz-modal>
+<br>
+<nz-table nzBordered nzTableLayout="fixed" >
+    <thead>
+      <tr>
+        <th>调配号</th>
+        <th>创建时间</th>
+        <th>商品</th>
+        <th>发货</th>
+        <th>收货</th>
+        <th>调配状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of listOfData">
+            <td>{{data.id}}</td>
+            <td>{{data.createAt}}</td>
+            <td>{{data.item}}</td>
+            <td>{{marketMap.get(data.sourceId)}}</td>
+            <td>{{marketMap.get(data.targetId)}}</td>
+            <td>{{statusMap.get(data.status)}}</td>
+            <td>
+                <button nz-button nzType="primary" (click)="send(data.id)" *ngIf="data.sourceId === 9999 && data.status === 20">发货</button>
+                <button nz-button nzType="primary" nzDanger (click)="cancel(data.id)" *ngIf="data.status > 0 && data.status <= 20">取消</button>
+            </td>
+        </tr>
+    </tbody>
+  </nz-table>

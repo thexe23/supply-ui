@@ -1,0 +1,22 @@
+import { fakeAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FailedComponent } from './failed.component';
+
+describe('FailedComponent', () => {
+  let component: FailedComponent;
+  let fixture: ComponentFixture<FailedComponent>;
+
+  beforeEach(fakeAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ FailedComponent ]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(FailedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
+
+  it('should compile', () => {
+    expect(component).toBeTruthy();
+  });
+});

@@ -1,0 +1,33 @@
+<div nz-row>
+  <div nz-col nzSpan="6">
+    <input nz-input placeholder="商品名" [(ngModel)]="selectItem">
+  </div>
+  <div nz-col nzSpan="2">
+    <nz-select nzAllowClear nzPlaceHolder="商超" [(ngModel)]="selectMarket">
+      <nz-option nzLabel="超市1" [nzValue]="10008"></nz-option>
+      <nz-option nzLabel="超市2" [nzValue]="10009"></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="6">
+    <button nz-button nzType="primary" (click)="search()">查询</button>
+  </div>
+</div>
+<br>
+<nz-table nzBordered nzTableLayout="fixed">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>商品名</th>
+        <th>所属商超</th>
+        <th>库存</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of listOfData">
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{this.marketMap.get(item.marketId)}}</td>
+            <td>{{item.stock}}</td>
+        </tr>
+    </tbody>
+  </nz-table>

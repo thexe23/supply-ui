@@ -1,0 +1,61 @@
+<div nz-row>
+  <div nz-col>
+    <input nz-input placeholder="收货人" [(ngModel)]="selectName">
+  </div>
+  <div nz-col>
+    <nz-select nzAllowClear nzPlaceHolder="社区" [(ngModel)]="selectOrg">
+      <nz-option nzLabel="华农东苑" [nzValue]="1001"></nz-option>
+      <nz-option nzLabel="华农西苑" [nzValue]="1002"></nz-option>
+      <nz-option nzLabel="华农南苑" [nzValue]="1003"></nz-option>
+      <nz-option nzLabel="华农北苑" [nzValue]="1004"></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col>
+    <nz-date-picker [(ngModel)]="dateFrom" (ngModelChange)="onChange($event)" nzPlaceHolder="起始时间"></nz-date-picker>
+  </div>
+  <div nz-col>
+    <nz-date-picker [(ngModel)]="dateTo" nzPlaceHolder="截止时间"></nz-date-picker>
+  </div>
+  <div nz-col>
+    <button nz-button nzType="primary" (click)="search()">查询</button>
+  </div>
+</div>
+ <nz-table nzBordered nzTableLayout="fixed">
+      <thead>
+        <tr>
+          <th>订单号</th>
+          <th>下单时间</th>
+          <th>商品</th>
+          <th>收货信息</th>
+          <th>订单金额</th>
+          <th>订单状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of listOfData">
+          <td>{{order.id}}</td>
+          <td>{{ formatDate(order.createdAt) }}</td>
+          <td>
+            <span *ngFor="let item of order.items">
+              {{item.name}} x {{item.number}}
+              <br>
+            </span>
+          </td>
+          <td>
+            收货人：{{order.userId}}
+            <br>
+            地址：{{orgMap.get(order.orgId)}}
+          </td>
+          <td>¥{{order.amount}}元</td>
+          <td>
+            {{statusMap.get(order.orderStatus)}}
+          </td>
+          <td>
+            <button nz-button nzType="primary" *ngIf="order.orderStatus == 20 && role == 3" (click)="deliver(order.id)">发货</button>
+            <button nz-button nzType="primary" *ngIf="order.orderStatus == 30 && role == 2" (click)="pickup(order.id)">取货</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  

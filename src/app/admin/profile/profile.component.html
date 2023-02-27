@@ -1,0 +1,58 @@
+    <form nz-form #validateForm *ngIf="data !== undefined">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">头像</nz-form-label>
+        <nz-upload
+        nzAction="api/guard/oss/upload"
+        (nzChange)="handleChange($event)"
+        [nzShowUploadList]="false"
+      >
+        <nz-avatar [nzSize]="64" nzIcon="user" [nzSrc]="data.imgUrl" *ngIf="data !== undefined"></nz-avatar>
+        </nz-upload>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">用户名</nz-form-label>
+        <nz-form-control nzHasFeedback [nzSpan]="12" nzErrorTip="用户名不能为空">
+          <input nz-input [(ngModel)]="data.username" name="required" required />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">密码</nz-form-label>
+        <nz-form-control nzHasFeedback [nzSpan]="12" nzErrorTip="密码不能低于六位">
+          <input nz-input [(ngModel)]="data.password" name="password" minlength="6"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">手机号</nz-form-label>
+        <nz-form-control nzHasFeedback [nzSpan]="12" nzErrorTip="手机号不能为空">
+          <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
+            <ng-template #addOnBeforeTemplate>
+              <nz-select ngModel="+86" name="prefix">
+                <nz-option nzLabel="+86" nzValue="+86"></nz-option>
+              </nz-select>
+            </ng-template>
+          <input nz-input [(ngModel)]="data.phone" name="phone" />
+        </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">用户类型</nz-form-label>
+        <nz-form-control nzHasFeedback [nzSpan]="12">
+          <input nz-input disabled [value]="roleMap.get(data.role)" name="role"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">社区</nz-form-label>
+        <nz-form-control nzHasFeedback [nzSpan]="12" nzErrorTip="Pattern not match">
+          <input nz-input disabled [value]="orgMap.get(data.orgId)" name="role"/>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control [nzOffset]="7" [nzSpan]="12">
+          <nz-space>
+            <button *nzSpaceItem nz-button (click)="save()"nzType="primary" >保存</button>
+            <button *nzSpaceItem nz-button (click)="resetForm()">重置</button>
+          </nz-space>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  
